@@ -8,7 +8,7 @@ let SockModel = {};
 // mongoose.Types.ObjectId is a function that
 // converts string ID to a real mongo ID
 
-const convertId = mongoose.Types.ObjectId;
+// const convertId = mongoose.Types.ObjectId;
 const setName = (name) => _.escape(name).trim();
 
 const SockSchema = new mongoose.Schema({
