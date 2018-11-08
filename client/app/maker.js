@@ -178,3 +178,4 @@ const getToken = () => {
 $(document).ready(function() {
   getToken();
 });
+
