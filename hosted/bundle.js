@@ -253,7 +253,7 @@ var SearchPage = function SearchPage(props) {
 
 var loadSocksFromServer = function loadSocksFromServer() {
   sendAjax('GET', '/getSocks', null, function (data) {
-    console.log(data);
+    console.log(data.socks);
   });
 };
 

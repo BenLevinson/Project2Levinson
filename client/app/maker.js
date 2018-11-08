@@ -119,7 +119,7 @@ const SearchPage = (props) => {
 
 const loadSocksFromServer = () => {
   sendAjax('GET', '/getSocks', null, (data) => {
-    console.log(data);
+    console.log(data.socks);
   });
 };
 
@@ -166,15 +166,15 @@ const setup = function(csrf) {
     createAccountPage(csrf);
     return false;
   });
- 
 };
 
 const getToken = () => {
   sendAjax('GET', '/getToken', null, (result) => {
     setup(result.csrfToken);
   });
+    
 };
 
 $(document).ready(function() {
-  getToken(); 
+  getToken();
 });
