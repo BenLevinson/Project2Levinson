@@ -1,5 +1,3 @@
-const models = require('../models');
-
 const homePage = (req, res) => {
   return res.render('app', { csrfToken: req.csrfToken() });
 };
