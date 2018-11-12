@@ -2,8 +2,8 @@ const models = require('../models');
 
 const Account = models.Account;
 
-const getAccInfo = (req, res) => {
-  return Account.AccountModel.getAccInfo(req.session.account);
+const getAccInfo = (account) => {
+  return Account.AccountModel.getAccInfo(account);
 };
 
 const loginPage = (req, res) => {
@@ -31,7 +31,7 @@ const login = (request, response) => {
     }
     req.session.account = Account.AccountModel.toAPI(account);
     console.log(req.session.account.username);
-    getAccInfo(req, res);
+    getAccInfo(req.session.account);
     return res.json({ redirect: '/home' });
   });
 };
@@ -65,7 +65,7 @@ const signup = (request, response) => {
 
     savePromise.then(() => {
       req.session.account = Account.AccountModel.toAPI(newAccount);
-      getAccInfo(req, res);
+      getAccInfo(req.session.account);
       res.json({ redirect: '/home' });
     });
 
