@@ -73,7 +73,7 @@ AccountSchema.statics.generateHash = (password, callback) => {
   );
 };
 
-AccountSchema.statics.getAccInfo = (doc, callback) => {
+AccountSchema.statics.getAccInfo = (doc) => {
   const info = {
     username: doc.username,
     purchases: doc.purchases,
