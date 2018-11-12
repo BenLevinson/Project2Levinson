@@ -2,7 +2,7 @@ const models = require('../models');
 
 const Account = models.Account;
 
-const getAccInfo = (req, res, callback) => {
+const getAccInfo = (req, res) => {
   return Account.AccountModel.getAccInfo(req.session.account);
 };
 
