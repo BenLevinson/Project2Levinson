@@ -1,9 +1,11 @@
 const handleError = (message) => {
-  $("#errorMessage").text(message);
+  $("#errMessage").text(message);
+  $("#errorMessage").fadeIn({width:'toggle'},350);
   console.log(message);
 };
 
 const redirect = (response) => {
+  $("#errorMessage").fadeIn({width:'hide'},350);
   window.location = response.redirect;
 };
 

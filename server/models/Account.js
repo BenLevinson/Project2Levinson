@@ -41,6 +41,8 @@ const AccountSchema = new mongoose.Schema({
 AccountSchema.statics.toAPI = doc => ({
   // _id is built into your mongo document and is guaranteed to be unique
   username: doc.username,
+  funds: doc.funds,
+  purchases: doc.purchases,
   _id: doc._id,
 });
 
@@ -69,6 +71,16 @@ AccountSchema.statics.generateHash = (password, callback) => {
   crypto.pbkdf2(password, salt, iterations, keyLength, 'RSA-SHA512', (err, hash) =>
     callback(salt, hash.toString('hex'))
   );
+};
+
+AccountSchema.statics.getAccInfo = (doc, callback) => {
+  const info = {
+    username: doc.username,
+    purchases: doc.purchases,
+    funds: doc.funds,
+  };
+  console.log('info ', info);
+  return AccountModel.find(info);
 };
 
 AccountSchema.statics.authenticate = (username, password, callback) =>

@@ -238,7 +238,7 @@ nav:nth-child(1) {
 }
 
 #searchBar {
-    width: 400px;
+    width: 300px;
     height: 30px;
 }
 
@@ -254,11 +254,81 @@ nav:nth-child(1) {
     cursor: pointer;
 }
 
-.dots {
-    height: 50px;
-    width: 50px;
+#displayContent {
+    width: 50%;
+    height: 80%;
+    display: block;
+    margin: 0 auto;
     position: relative;
-    left: 361px;
-    bottom: 100px;
-    transform: rotate(90deg);
+    bottom: 400px;
+    min-width: 1000px;
+}
+
+#displayContent img {
+    width: 125px;
+    height: 125px;
+}
+
+#displayContent img:hover {
+    cursor: pointer;
+}
+.imgContentDiv {
+    width: 125px;
+    height: 145px;
+    display: inline-block;
+    padding-left: 27.5px;
+    padding-top: 5px;
+    padding-bottom: 7px;
+}
+
+.imgContentDiv h5 {
+    text-align: center;
+    position: relative;
+    bottom: 18px;
+}
+
+#topRowSocks {
+    height: 145px;
+}
+
+#secondRowSocks {
+    height: 145px;
+}
+
+#thirdRowSocks {
+    height: 145px;
+}
+
+#fourthRowSocks {
+    height: 145px;
+}
+
+#bottomRowSocks {
+    height: 145px;
+}
+
+#hiddenContent {
+    display: none;
+}
+
+#errorMessage {
+    bottom: 150px;
+    display:none;
+    width: 300px;
+    height: 650px;
+    position: relative;
+    z-index: 200;
+    left: 42%;
+    overflow: hidden;
+}
+
+#errorMessage h3 {
+    width: 400px;
+}
+
+#errMessage {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: red;
+    font-style: italic;
 }

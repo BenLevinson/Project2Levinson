@@ -2,8 +2,10 @@
 
 var handleLogin = function handleLogin(e) {
   e.preventDefault();
-  if ($("user").val() === '' || $("#pass").val() === '') {
+  $("#errorMessage").fadeIn({ width: 'hide' }, 350);
+  if ($("#user").val() === '' || $("#pass").val() === '') {
     handleError("Username or Password is empty.");
+    $('#user').val = "";
     return false;
   }
   console.log($("input[name=csrf]").val());
@@ -13,12 +15,16 @@ var handleLogin = function handleLogin(e) {
 
 var handleSignup = function handleSignup(e) {
   e.preventDefault();
-  if ($("user").val() === '' || $("#pass").val() === '' || $("#pass2").val() === '') {
+  $("#errorMessage").fadeIn({ width: 'hide' }, 350);
+  if ($("#user").val() === '' || $("#pass").val() === '' || $("#pass2").val() === '') {
     handleError("All fields are required.");
     return false;
   }
   if ($("#pass").val() !== $("#pass2").val()) {
     handleError("Passwords do not match.");
+    $("user").text = "";
+    $("#pass").text = "";
+    $("pass2").text = "";
     return false;
   }
   sendAjax('POST', $("#signupForm").attr("action"), $("#signupForm").serialize(), redirect);
@@ -299,11 +305,13 @@ $(document).ready(function () {
 "use strict";
 
 var handleError = function handleError(message) {
-  $("#errorMessage").text(message);
+  $("#errMessage").text(message);
+  $("#errorMessage").fadeIn({ width: 'toggle' }, 350);
   console.log(message);
 };
 
 var redirect = function redirect(response) {
+  $("#errorMessage").fadeIn({ width: 'hide' }, 350);
   window.location = response.redirect;
 };
 

@@ -1,7 +1,9 @@
 const handleLogin = (e) => {
   e.preventDefault();
-  if ($("user").val() === '' || $("#pass").val() === '') {
+  $("#errorMessage").fadeIn({width:'hide'},350);
+  if ($("#user").val() === '' || $("#pass").val() === '') {
     handleError("Username or Password is empty.");
+    $('#user').val = "";
     return false;
   }
   console.log($("input[name=csrf]").val());
@@ -11,12 +13,16 @@ const handleLogin = (e) => {
 
 const handleSignup = (e) => {
   e.preventDefault();
-  if ($("user").val() === '' || $("#pass").val() === '' || $("#pass2").val() === '') {
+  $("#errorMessage").fadeIn({width:'hide'},350);
+  if ($("#user").val() === '' || $("#pass").val() === '' || $("#pass2").val() === '') {
     handleError("All fields are required.");
     return false;
   }
   if ($("#pass").val() !== $("#pass2").val()) {
     handleError("Passwords do not match.");
+    $("user").text = "";
+    $("#pass").text = "";
+    $("pass2").text = "";
     return false;
   }
   sendAjax('POST', $("#signupForm").attr("action"), $("#signupForm").serialize(), redirect);

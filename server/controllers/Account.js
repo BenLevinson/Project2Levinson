@@ -2,6 +2,10 @@ const models = require('../models');
 
 const Account = models.Account;
 
+const getAccInfo = (req, res, callback) => {
+  return Account.AccountModel.getAccInfo(req.session.account, callback);
+};
+
 const loginPage = (req, res) => {
   res.render('login', { csrfToken: req.csrfToken() });
 };
@@ -27,6 +31,7 @@ const login = (request, response) => {
     }
     req.session.account = Account.AccountModel.toAPI(account);
     console.log(req.session.account.username);
+    getAccInfo(req, res, (err, account));
     return res.json({ redirect: '/home' });
   });
 };
@@ -52,12 +57,15 @@ const signup = (request, response) => {
       username: req.body.username,
       salt,
       password: hash,
+      purchases: 0,
+      funds: 100,
     };
     const newAccount = new Account.AccountModel(accountData);
     const savePromise = newAccount.save();
 
     savePromise.then(() => {
       req.session.account = Account.AccountModel.toAPI(newAccount);
+      getAccInfo(req, res, (salt, hash));
       res.json({ redirect: '/home' });
     });
 
@@ -85,3 +93,4 @@ module.exports.login = login;
 module.exports.logout = logout;
 module.exports.signup = signup;
 module.exports.getToken = getToken;
+module.exports.getAccInfo = getAccInfo;
