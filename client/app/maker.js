@@ -1,12 +1,35 @@
 const handleSearch = (e) => {
   e.preventDefault();
   $("#errorMessage").fadeIn({width:'hide'},350);
+  setTimeout(function() {
+   $("#errorMessage").fadeOut({width:'hide'}, 350);
+  }, 3000);
   if ($("#searchBar").val() === '') {
     handleError("Please type in a valid query!");
     return false;
   }
   sendAjax('GET', $("#searchForm").attr("action"), $("#searchForm").serialize(), function() {
     //loadSocksFromServer(props);
+  });
+  return false;
+};
+
+const handlePassChange = (e) => {
+  e.preventDefault();
+  $("#errorMessage").fadeIn({width:'hide'},350);
+  setTimeout(function() {
+   $("#errorMessage").fadeOut({width:'hide'}, 350);
+  }, 3000);
+  if ($("#newPass1").val() === '' || $("#newPass2").val() === '') {
+    handleError("All fields are required.");
+    return false;
+  }
+  if ($("#newPass1").val() !== $("#newPass2").val()) {
+    handleError("Passwords do not match.");
+    return false;
+  }
+  sendAjax('POST', $("#passChangeForm").attr("action"), $("#passChangeForm").serialize(), function() {
+    console.log("in pass change");
   });
   return false;
 };
@@ -52,9 +75,6 @@ const ContentPage = (props) => {
 };
 
 const AccountPage = (props) => {
-  loadAccountInfo(props);
-}
-const loadAccountInfo = (props) => {
   console.log("in loading info");
   //sendAjax('GET', '/getAccInfo', null, (data) => {
     ReactDOM.render(
@@ -68,10 +88,23 @@ const loadAccountInfo = (props) => {
         <div id="accountInfo">
           <h1> Account Information </h1>
           <p> Username: </p>
-          <p> Purchases: </p>
-          <p> Funds: $</p>
-          <h4> Add Funds </h4>
-          <h4> Change Password </h4>
+          <p> Purchases:  </p>
+          <p> Funds: $ </p>
+          <form id="passChangeForm" 
+            name="passChangeForm"
+            onSubmit={handlePassChange}
+            action="/passChange"
+            method="POST"
+            className="passForm"
+          >
+          <label htmlFor="newPass1">Password: </label>
+          <input id="newPass1" type="password" name="newPass1" placeholder="password"/>
+          <label htmlFor="newPass2">Retype: </label>
+          <input id="newPass2" type="password" name="newPass2" placeholder="retype password"/>
+          <input type="hidden" name="_csrf" value={props.csrf} />
+          <input className="passForm" type="submit" value="Change Password" />
+          </form>
+          <h4 id="addFunds"> Add Funds </h4>
         </div>
       </div>, document.querySelector("#content")
     );
@@ -79,10 +112,6 @@ const loadAccountInfo = (props) => {
 };
 
 const SearchPage = (props) => {
- loadSocksFromServer(props);
-};
-
-const loadSocksFromServer = (props) => {
   sendAjax('GET', '/getSocks', null, (data) => {
     ReactDOM.render(
       <div id="searchPageDiv">
@@ -90,28 +119,6 @@ const loadSocksFromServer = (props) => {
           <div className="taglineDiv">
             <h1> Socko's Socks! </h1>
             <h3> "Who needs friends when you have cool socks?" </h3>
-          </div>
-          <div id="toggleDisplay">
-            <div id="filterDiv">
-              <h3> Filter </h3>
-            </div>
-            <input id="coolSocks" type="checkbox" name="coolSocks"/>
-            <label htmlFor="coolSocks">Hide Cool Socks</label>
-            <br/>
-            <input id="crazySocks" type="checkbox" name="crazySocks"/>
-            <label htmlFor="crazySocks">Hide Crazy Socks</label>
-            <br/>
-            <input id="funnySocks" type="checkbox" name="funnySocks"/>
-            <label htmlFor="funnySocks">Hide Funny Socks</label>
-            <br/>
-            <input id="normalSocks" type="checkbox" name="normalSocks"/>
-            <label htmlFor="normalSocks">Hide Normal Socks</label>
-            <br/>
-            <input id="scarySocks" type="checkbox" name="scarySocks"/>
-            <label htmlFor="scarySocks">Hide Scary Socks</label>
-            <br/>
-            <input id="superSocks" type="checkbox" name="superSocks"/>
-            <label htmlFor="superSocks">Hide Super Socks</label>
           </div>
           <div id="searchInfo">
             <form id="searchForm" 
@@ -237,7 +244,7 @@ const loadSocksFromServer = (props) => {
               <img src={data.socks[24].picture} alt={data.socks[24].name} />
               <h5> {data.socks[24].name} </h5>
             </div>
-            <div className="imgContentDiv" id="superheroSocks">
+            <div className="imgContentDiv">
               <img src={data.socks[25].picture} alt={data.socks[25].name} />
               <h5> {data.socks[25].name} </h5>
             </div>
@@ -261,6 +268,113 @@ const loadSocksFromServer = (props) => {
         </div>
       </div>, document.querySelector("#content")
     );
+    for(let i = 0; i < 30; i++) {
+      const buyButton = document.querySelectorAll(".imgContentDiv")[i];
+      buyButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        BuyPage(props, data.socks[i].name, data.socks[i].price, data.socks[i].category, data.socks[i].picture);
+        return false;
+      });
+    }
+  });
+};
+
+const BuyPage = (props, name, price, category, picture) => {
+  sendAjax('GET', '/getSocks', null, (data) => {
+    let pic1 = "";
+    let pic1Name = "";
+    let pic1Price = "";
+    let pic1Category = "";
+    let pic2 = "";
+    let pic2Name = "";
+    let pic2Price = "";
+    let pic2Category = "";
+    let pic3 = "";
+    let pic3Name = "";
+    let pic3Price = "";
+    let pic3Category = "";
+    let count = 4;
+    for(let i = 0; i < 30; i++) {
+      if(data.socks[i].category === category && data.socks[i].name != name) {
+        count--;
+        switch(count) {
+          case 3:
+            pic1 = data.socks[i].picture;
+            pic1Name = data.socks[i].name;
+            pic1Price = data.socks[i].price;
+            pic1Category = data.socks[i].category;
+            break;
+          case 2:
+            pic2 = data.socks[i].picture;
+            pic2Name = data.socks[i].name;
+            pic2Price = data.socks[i].price;
+            pic2Category = data.socks[i].category;
+            break;
+          case 1:
+            pic3 = data.socks[i].picture;
+            pic3Name = data.socks[i].name;
+            pic3Price = data.socks[i].price;
+            pic3Category = data.socks[i].category;
+            break;
+          default:
+            console.log("no more socks needed");
+        }
+      }
+    }
+    ReactDOM.render (
+      <div id="buyStart">
+        <div className="taglineDiv">
+          <h1> Socko's Socks! </h1>
+          <h3> "Who needs friends when you have cool socks?" </h3>
+        </div>
+        <br/>
+        <div id="buyInfo">
+          <img src={picture} alt={name}/>
+          <h3> Name: {name} </h3>
+          <h3> Category: {category} </h3>
+          <h3> Price: {price} </h3>
+          <h3> Description: Coming soon!</h3>
+          <h2 id="buyNow"> Buy Now! </h2>
+        </div>
+        <div id="similarSocks">
+          <div id="sock1">
+            <img src={pic1} alt={pic1Name}/>
+            <h4> {pic1Name} </h4>
+          </div>
+          <div id="sock2">
+            <img src={pic2} alt={pic2Name}/>
+            <h4> {pic2Name} </h4>
+          </div>
+            <div id="sock3">
+            <img src={pic3} alt={pic3Name}/>
+            <h4> {pic3Name} </h4>
+          </div>
+        </div>
+      </div>, document.querySelector("#content")
+    );
+    const bought = document.querySelector("#buyNow");
+    bought.addEventListener("click", (e) => {
+      console.log("bought " + name + " for " + price + " it was of the " + category + " type and looks like this " + picture);
+      // only let them buy if user has enough funds
+    })
+    const sock1Link = document.querySelector("#sock1");
+    sock1Link.addEventListener("click", (e) => {
+      e.preventDefault();
+      BuyPage(props, pic1Name, pic1Price, pic1Category, pic1);
+      return false;
+    });
+    const sock2Link = document.querySelector("#sock2");
+    sock2Link.addEventListener("click", (e) => {
+      e.preventDefault();
+      BuyPage(props, pic2Name, pic2Price, pic2Category, pic2);
+      return false;
+    });
+    const sock3Link = document.querySelector("#sock3");
+    sock3Link.addEventListener("click", (e) => {
+      e.preventDefault();
+      BuyPage(props, pic3Name, pic3Price, pic3Category, pic3);
+      return false;
+    });
   });
 };
 

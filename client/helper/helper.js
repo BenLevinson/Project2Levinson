@@ -7,6 +7,7 @@ const handleError = (message) => {
 const redirect = (response) => {
   $("#errorMessage").fadeIn({width:'hide'},350);
   window.location = response.redirect;
+  console.log(response);
 };
 
 const sendAjax = (type, action, data, success) => {
@@ -19,6 +20,7 @@ const sendAjax = (type, action, data, success) => {
     success: success,
     error: function(xhr, status, error) {
       var messageObj = JSON.parse(xhr.responseText);
+      console.log(action);
       handleError(messageObj.error);
     },
   });

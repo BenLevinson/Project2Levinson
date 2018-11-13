@@ -79,6 +79,33 @@ const signup = (request, response) => {
   });
 };
 
+const changePassword = (request, response) => {
+  const req = request;
+  const res = response;
+
+  req.body.pass = `${req.body.newPass1}`;
+  req.body.pass2 = `${req.body.newPass2}`;
+
+  if (!req.body.newPass1 || !req.body.newPass2) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+
+  if (req.body.newPass1 !== req.body.newPass2) {
+    return res.status(400).json({ error: 'Passwords do not match' });
+  }
+
+  return Account.AccountModel.findByUsername(req.session.account.username).then(function(user) {
+    if (user) {
+      user.setPassword(req.body.pass2, function() {
+        user.save();
+        res.status(200).json({ message: 'Password reset successful!' });
+      });
+    } else {
+      res.status(500).json({ message: 'User does not exist.' });
+    }
+  });
+};
+
 const getToken = (request, response) => {
   const req = request;
   const res = response;
@@ -94,3 +121,4 @@ module.exports.logout = logout;
 module.exports.signup = signup;
 module.exports.getToken = getToken;
 module.exports.getAccInfo = getAccInfo;
+module.exports.changePassword = changePassword;

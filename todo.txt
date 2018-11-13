@@ -1,0 +1,35 @@
+TODO:
+
+Account Page:
+- Clicking account button shows user their account information
+* Shows username, available funds, amount of purchases they've made
+* Gives option for user to change password and add funds
+
+CSS:
+- Restyle CSS
+* Restyle login/signup page css?
+* Account tab CSS
+* Sock browsing page CSS
+* Buying page CSS
+* CSS page resizing so labels look ok when page is small
+* Responsive Design
+* Animation for clicking dots to fade fitler bar in and out
+
+Search Page:
+- Live Search if I have time
+
+Buy Page:
+- If user has available funds, buy goes through. If not, error message saying user doesn't have enough funds. Purchase # increases if successful.
+// to buy, i might need to make a submit button with an action that goes to a getFunds function which lets you buy if you have enough.
+
+What I need help with from Cody:
+
+- Display account information on account page
+- Modify account information (Adding funds)
+
+Current Errors:
+
+- React minified error 105 when displaying accounts page and search page
+- Currently get objects in database to display on search page with this error, but not info from accounts page
+- Spam clicking on buy page makes it bug out (probably unfixable but will ask cody about!)
+- Change password doesn't change password

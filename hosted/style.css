@@ -234,7 +234,6 @@ nav:nth-child(1) {
 #searchInfo {
     position: relative;
     text-align: center;
-    bottom: 400px;
 }
 
 #searchBar {
@@ -260,7 +259,6 @@ nav:nth-child(1) {
     display: block;
     margin: 0 auto;
     position: relative;
-    bottom: 400px;
     min-width: 1000px;
 }
 
@@ -312,13 +310,12 @@ nav:nth-child(1) {
 }
 
 #errorMessage {
-    bottom: 150px;
     display:none;
     width: 300px;
     height: 650px;
     position: relative;
     z-index: 200;
-    left: 42%;
+    left: 44%;
     overflow: hidden;
 }
 
@@ -331,4 +328,115 @@ nav:nth-child(1) {
     font-weight: bold;
     color: red;
     font-style: italic;
+}
+
+.passForm {
+    margin: 10px;
+}
+
+.passForm label {
+    font-size: 15px;
+    margin: 10px;
+}
+
+#notFoundPage {
+    margin: auto;
+    padding: 150px;
+    text-align: center;
+    font-size: 50px;
+}
+
+#notFoundLink {
+    text-align: center;
+    display: block;
+    font-size: 20px;
+    position: relative;
+    bottom: 100px;
+}
+
+#buyInfo {
+    text-align: center;
+    margin: 0 auto;
+}
+
+#buyInfo img {
+    width: 250px;
+    height: 250px;
+    border: 1px solid black;
+    position: relative;
+    right: 200px;
+}
+
+#buyInfo h3 {
+    position: relative;
+    left: 100px;
+    bottom: 250px;
+}
+
+#buyInfo h2 {
+    font-size: 24px;
+    display: inline-block;
+    border: 1px solid black;
+    margin: 20px;
+    padding: 10px;
+    position: relative;
+    bottom: 250px;
+    left: 102px;
+}
+
+#buyInfo h2:hover {
+    cursor: pointer;
+    transition: background-color 0.4s ease;
+    background-color: darkgrey;
+}
+
+#similarSocks {
+    position: relative;
+    bottom: 100px;
+    text-align: center;
+    margin: 0 auto;
+    width: 100%;
+    min-width: 1300px;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+#similarSocks h3 {
+    position: relative;
+    bottom: 70px;
+}
+#similarSocks img {
+    width: 250px;
+    height: 250px;
+    border: 1px solid black;
+    position: relative;
+    top: 15px;
+}
+
+#sock1 {
+    display: inline-block;
+    position: relative;
+    right: 250px;
+}
+
+#sock2 {
+    display: inline-block;
+}
+
+#sock3 {
+    display: inline-block;
+    position: relative;
+    left: 250px;
+}
+
+#sock1:hover {
+    cursor: pointer;
+}
+
+#sock2 {
+    cursor: pointer;
+}
+
+#sock3 {
+    cursor: pointer;
 }

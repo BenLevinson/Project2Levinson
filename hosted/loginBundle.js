@@ -3,9 +3,11 @@
 var handleLogin = function handleLogin(e) {
   e.preventDefault();
   $("#errorMessage").fadeIn({ width: 'hide' }, 350);
+  setTimeout(function () {
+    $("#errorMessage").fadeOut({ width: 'hide' }, 350);
+  }, 3000);
   if ($("#user").val() === '' || $("#pass").val() === '') {
     handleError("Username or Password is empty.");
-    $('#user').val = "";
     return false;
   }
   console.log($("input[name=csrf]").val());
@@ -16,15 +18,15 @@ var handleLogin = function handleLogin(e) {
 var handleSignup = function handleSignup(e) {
   e.preventDefault();
   $("#errorMessage").fadeIn({ width: 'hide' }, 350);
+  setTimeout(function () {
+    $("#errorMessage").fadeOut({ width: 'hide' }, 350);
+  }, 3000);
   if ($("#user").val() === '' || $("#pass").val() === '' || $("#pass2").val() === '') {
     handleError("All fields are required.");
     return false;
   }
   if ($("#pass").val() !== $("#pass2").val()) {
     handleError("Passwords do not match.");
-    $("user").text = "";
-    $("#pass").text = "";
-    $("pass2").text = "";
     return false;
   }
   sendAjax('POST', $("#signupForm").attr("action"), $("#signupForm").serialize(), redirect);
@@ -313,6 +315,7 @@ var handleError = function handleError(message) {
 var redirect = function redirect(response) {
   $("#errorMessage").fadeIn({ width: 'hide' }, 350);
   window.location = response.redirect;
+  console.log(response);
 };
 
 var sendAjax = function sendAjax(type, action, data, success) {
@@ -325,6 +328,7 @@ var sendAjax = function sendAjax(type, action, data, success) {
     success: success,
     error: function error(xhr, status, _error) {
       var messageObj = JSON.parse(xhr.responseText);
+      console.log(action);
       handleError(messageObj.error);
     }
   });

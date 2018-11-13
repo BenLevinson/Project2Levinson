@@ -10,7 +10,11 @@ const searchPage = (req, res) => {
   return res.render('search', { csrfToken: req.csrfToken() });
 };
 
+const notFoundPage = (req, res) => {
+  return res.render('notFound', { csrfToken: req.csrfToken() });
+};
 
 module.exports.homePage = homePage;
 module.exports.accountPage = accountPage;
 module.exports.searchPage = searchPage;
+module.exports.notFoundPage = notFoundPage;

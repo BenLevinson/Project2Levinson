@@ -79,7 +79,7 @@ SockModel.addSock('Baseball Socks', 'Cool', 13.99, 'assets/img/baseballSock.jpg'
 SockModel.addSock('Black Socks', 'Normal', 9.99, 'assets/img/blackSock.jpg', 'sock');
 SockModel.addSock('Bob Ross Socks', 'Funny', 11.99, 'assets/img/bobSock.jpg', 'sock');
 SockModel.addSock('Caution Socks', 'Crazy', 9.99, 'assets/img/cautionSock.jpg', 'sock');
-SockModel.addSock('Checkered Socks', 'Normal', 9.99, 'assets/img/checkerSock.jpg', 'sock');
+SockModel.addSock('Checkered Socks', 'Crazy', 9.99, 'assets/img/checkerSock.jpg', 'sock');
 SockModel.addSock('Really Cool Socks', 'Cool', 12.99, 'assets/img/coolSock.jpg', 'sock');
 SockModel.addSock('Couch Socks', 'Funny', 11.99, 'assets/img/couchSock.jpg', 'sock');
 SockModel.addSock('Dog Socks', 'Funny', 14.99, 'assets/img/dogSock.jpg', 'sock');

@@ -3,12 +3,35 @@
 var handleSearch = function handleSearch(e) {
   e.preventDefault();
   $("#errorMessage").fadeIn({ width: 'hide' }, 350);
+  setTimeout(function () {
+    $("#errorMessage").fadeOut({ width: 'hide' }, 350);
+  }, 3000);
   if ($("#searchBar").val() === '') {
     handleError("Please type in a valid query!");
     return false;
   }
   sendAjax('GET', $("#searchForm").attr("action"), $("#searchForm").serialize(), function () {
     //loadSocksFromServer(props);
+  });
+  return false;
+};
+
+var handlePassChange = function handlePassChange(e) {
+  e.preventDefault();
+  $("#errorMessage").fadeIn({ width: 'hide' }, 350);
+  setTimeout(function () {
+    $("#errorMessage").fadeOut({ width: 'hide' }, 350);
+  }, 3000);
+  if ($("#newPass1").val() === '' || $("#newPass2").val() === '') {
+    handleError("All fields are required.");
+    return false;
+  }
+  if ($("#newPass1").val() !== $("#newPass2").val()) {
+    handleError("Passwords do not match.");
+    return false;
+  }
+  sendAjax('POST', $("#passChangeForm").attr("action"), $("#passChangeForm").serialize(), function () {
+    console.log("in pass change");
   });
   return false;
 };
@@ -104,9 +127,6 @@ var ContentPage = function ContentPage(props) {
 };
 
 var AccountPage = function AccountPage(props) {
-  loadAccountInfo(props);
-};
-var loadAccountInfo = function loadAccountInfo(props) {
   console.log("in loading info");
   //sendAjax('GET', '/getAccInfo', null, (data) => {
   ReactDOM.render(React.createElement(
@@ -146,22 +166,41 @@ var loadAccountInfo = function loadAccountInfo(props) {
       React.createElement(
         "p",
         null,
-        " Purchases: "
+        " Purchases:  "
       ),
       React.createElement(
         "p",
         null,
-        " Funds: $"
+        " Funds: $ "
+      ),
+      React.createElement(
+        "form",
+        { id: "passChangeForm",
+          name: "passChangeForm",
+          onSubmit: handlePassChange,
+          action: "/passChange",
+          method: "POST",
+          className: "passForm"
+        },
+        React.createElement(
+          "label",
+          { htmlFor: "newPass1" },
+          "Password: "
+        ),
+        React.createElement("input", { id: "newPass1", type: "password", name: "newPass1", placeholder: "password" }),
+        React.createElement(
+          "label",
+          { htmlFor: "newPass2" },
+          "Retype: "
+        ),
+        React.createElement("input", { id: "newPass2", type: "password", name: "newPass2", placeholder: "retype password" }),
+        React.createElement("input", { type: "hidden", name: "_csrf", value: props.csrf }),
+        React.createElement("input", { className: "passForm", type: "submit", value: "Change Password" })
       ),
       React.createElement(
         "h4",
-        null,
+        { id: "addFunds" },
         " Add Funds "
-      ),
-      React.createElement(
-        "h4",
-        null,
-        " Change Password "
       )
     )
   ), document.querySelector("#content"));
@@ -169,10 +208,6 @@ var loadAccountInfo = function loadAccountInfo(props) {
 };
 
 var SearchPage = function SearchPage(props) {
-  loadSocksFromServer(props);
-};
-
-var loadSocksFromServer = function loadSocksFromServer(props) {
   sendAjax('GET', '/getSocks', null, function (data) {
     ReactDOM.render(React.createElement(
       "div",
@@ -192,60 +227,6 @@ var loadSocksFromServer = function loadSocksFromServer(props) {
             "h3",
             null,
             " \"Who needs friends when you have cool socks?\" "
-          )
-        ),
-        React.createElement(
-          "div",
-          { id: "toggleDisplay" },
-          React.createElement(
-            "div",
-            { id: "filterDiv" },
-            React.createElement(
-              "h3",
-              null,
-              " Filter "
-            )
-          ),
-          React.createElement("input", { id: "coolSocks", type: "checkbox", name: "coolSocks" }),
-          React.createElement(
-            "label",
-            { htmlFor: "coolSocks" },
-            "Hide Cool Socks"
-          ),
-          React.createElement("br", null),
-          React.createElement("input", { id: "crazySocks", type: "checkbox", name: "crazySocks" }),
-          React.createElement(
-            "label",
-            { htmlFor: "crazySocks" },
-            "Hide Crazy Socks"
-          ),
-          React.createElement("br", null),
-          React.createElement("input", { id: "funnySocks", type: "checkbox", name: "funnySocks" }),
-          React.createElement(
-            "label",
-            { htmlFor: "funnySocks" },
-            "Hide Funny Socks"
-          ),
-          React.createElement("br", null),
-          React.createElement("input", { id: "normalSocks", type: "checkbox", name: "normalSocks" }),
-          React.createElement(
-            "label",
-            { htmlFor: "normalSocks" },
-            "Hide Normal Socks"
-          ),
-          React.createElement("br", null),
-          React.createElement("input", { id: "scarySocks", type: "checkbox", name: "scarySocks" }),
-          React.createElement(
-            "label",
-            { htmlFor: "scarySocks" },
-            "Hide Scary Socks"
-          ),
-          React.createElement("br", null),
-          React.createElement("input", { id: "superSocks", type: "checkbox", name: "superSocks" }),
-          React.createElement(
-            "label",
-            { htmlFor: "superSocks" },
-            "Hide Super Socks"
           )
         ),
         React.createElement(
@@ -590,7 +571,7 @@ var loadSocksFromServer = function loadSocksFromServer(props) {
           ),
           React.createElement(
             "div",
-            { className: "imgContentDiv", id: "superheroSocks" },
+            { className: "imgContentDiv" },
             React.createElement("img", { src: data.socks[25].picture, alt: data.socks[25].name }),
             React.createElement(
               "h5",
@@ -651,6 +632,182 @@ var loadSocksFromServer = function loadSocksFromServer(props) {
         )
       )
     ), document.querySelector("#content"));
+
+    var _loop = function _loop(i) {
+      var buyButton = document.querySelectorAll(".imgContentDiv")[i];
+      buyButton.addEventListener("click", function (e) {
+        e.preventDefault();
+        BuyPage(props, data.socks[i].name, data.socks[i].price, data.socks[i].category, data.socks[i].picture);
+        return false;
+      });
+    };
+
+    for (var i = 0; i < 30; i++) {
+      _loop(i);
+    }
+  });
+};
+
+var BuyPage = function BuyPage(props, name, price, category, picture) {
+  sendAjax('GET', '/getSocks', null, function (data) {
+    var pic1 = "";
+    var pic1Name = "";
+    var pic1Price = "";
+    var pic1Category = "";
+    var pic2 = "";
+    var pic2Name = "";
+    var pic2Price = "";
+    var pic2Category = "";
+    var pic3 = "";
+    var pic3Name = "";
+    var pic3Price = "";
+    var pic3Category = "";
+    var count = 4;
+    for (var i = 0; i < 30; i++) {
+      if (data.socks[i].category === category && data.socks[i].name != name) {
+        count--;
+        switch (count) {
+          case 3:
+            pic1 = data.socks[i].picture;
+            pic1Name = data.socks[i].name;
+            pic1Price = data.socks[i].price;
+            pic1Category = data.socks[i].category;
+            break;
+          case 2:
+            pic2 = data.socks[i].picture;
+            pic2Name = data.socks[i].name;
+            pic2Price = data.socks[i].price;
+            pic2Category = data.socks[i].category;
+            break;
+          case 1:
+            pic3 = data.socks[i].picture;
+            pic3Name = data.socks[i].name;
+            pic3Price = data.socks[i].price;
+            pic3Category = data.socks[i].category;
+            break;
+          default:
+            console.log("no more socks needed");
+        }
+      }
+    }
+    ReactDOM.render(React.createElement(
+      "div",
+      { id: "buyStart" },
+      React.createElement(
+        "div",
+        { className: "taglineDiv" },
+        React.createElement(
+          "h1",
+          null,
+          " Socko's Socks! "
+        ),
+        React.createElement(
+          "h3",
+          null,
+          " \"Who needs friends when you have cool socks?\" "
+        )
+      ),
+      React.createElement("br", null),
+      React.createElement(
+        "div",
+        { id: "buyInfo" },
+        React.createElement("img", { src: picture, alt: name }),
+        React.createElement(
+          "h3",
+          null,
+          " Name: ",
+          name,
+          " "
+        ),
+        React.createElement(
+          "h3",
+          null,
+          " Category: ",
+          category,
+          " "
+        ),
+        React.createElement(
+          "h3",
+          null,
+          " Price: ",
+          price,
+          " "
+        ),
+        React.createElement(
+          "h3",
+          null,
+          " Description: Coming soon!"
+        ),
+        React.createElement(
+          "h2",
+          { id: "buyNow" },
+          " Buy Now! "
+        )
+      ),
+      React.createElement(
+        "div",
+        { id: "similarSocks" },
+        React.createElement(
+          "div",
+          { id: "sock1" },
+          React.createElement("img", { src: pic1, alt: pic1Name }),
+          React.createElement(
+            "h4",
+            null,
+            " ",
+            pic1Name,
+            " "
+          )
+        ),
+        React.createElement(
+          "div",
+          { id: "sock2" },
+          React.createElement("img", { src: pic2, alt: pic2Name }),
+          React.createElement(
+            "h4",
+            null,
+            " ",
+            pic2Name,
+            " "
+          )
+        ),
+        React.createElement(
+          "div",
+          { id: "sock3" },
+          React.createElement("img", { src: pic3, alt: pic3Name }),
+          React.createElement(
+            "h4",
+            null,
+            " ",
+            pic3Name,
+            " "
+          )
+        )
+      )
+    ), document.querySelector("#content"));
+    var bought = document.querySelector("#buyNow");
+    bought.addEventListener("click", function (e) {
+      console.log("bought " + name + " for " + price + " it was of the " + category + " type and looks like this " + picture);
+      // only let them buy if user has enough funds
+    });
+    var sock1Link = document.querySelector("#sock1");
+    sock1Link.addEventListener("click", function (e) {
+      e.preventDefault();
+      BuyPage(props, pic1Name, pic1Price, pic1Category, pic1);
+      return false;
+    });
+    var sock2Link = document.querySelector("#sock2");
+    sock2Link.addEventListener("click", function (e) {
+      e.preventDefault();
+      BuyPage(props, pic2Name, pic2Price, pic2Category, pic2);
+      return false;
+    });
+    var sock3Link = document.querySelector("#sock3");
+    sock3Link.addEventListener("click", function (e) {
+      e.preventDefault();
+      BuyPage(props, pic3Name, pic3Price, pic3Category, pic3);
+      return false;
+    });
   });
 };
 
@@ -710,6 +867,7 @@ var handleError = function handleError(message) {
 var redirect = function redirect(response) {
   $("#errorMessage").fadeIn({ width: 'hide' }, 350);
   window.location = response.redirect;
+  console.log(response);
 };
 
 var sendAjax = function sendAjax(type, action, data, success) {
@@ -722,6 +880,7 @@ var sendAjax = function sendAjax(type, action, data, success) {
     success: success,
     error: function error(xhr, status, _error) {
       var messageObj = JSON.parse(xhr.responseText);
+      console.log(action);
       handleError(messageObj.error);
     }
   });
