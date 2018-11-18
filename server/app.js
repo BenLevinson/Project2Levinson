@@ -18,7 +18,6 @@ const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/blevinsonprojecttw
 
 mongoose.connect(dbURL, (err) => {
   if (err) {
-    console.log('Could not connect to database.');
     throw err;
   }
 });
@@ -77,7 +76,6 @@ app.use((err, req, res, next) => {
   if (err.code !== 'EBADCSRFTOKEN') {
     return next(err);
   }
-  console.log('Missing CSRF token');
   return false;
 });
 

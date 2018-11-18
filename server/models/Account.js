@@ -8,7 +8,7 @@ const iterations = 10000;
 const saltLength = 64;
 const keyLength = 64;
 
-const AccountSchema = new mongoose.Schema({
+const AccountSchema = new mongoose.Schema({ // account schema
   username: {
     type: String,
     required: true,
@@ -48,7 +48,6 @@ AccountSchema.statics.toAPI = doc => ({
 
 const validatePassword = (doc, password, callback) => {
   const pass = doc.password;
-
   return crypto.pbkdf2(password, doc.salt, iterations, keyLength, 'RSA-SHA512', (err, hash) => {
     if (hash.toString('hex') !== pass) {
       return callback(false);
@@ -73,14 +72,53 @@ AccountSchema.statics.generateHash = (password, callback) => {
   );
 };
 
-AccountSchema.statics.getAccInfo = (doc) => {
+AccountSchema.statics.getAccInfo = (doc, callback) => { // find and return account information
   const info = {
     username: doc.username,
     purchases: doc.purchases,
     funds: doc.funds,
   };
-  console.log('info ', info);
-  return AccountModel.find(info);
+  return AccountModel.find(info, callback);
+};
+
+AccountSchema.statics.addFunds = (doc, fundsToAdd, callback) => { // return updated funds info
+  const info = {
+    username: doc.username,
+    purchases: doc.purchases,
+    funds: doc.funds,
+  };
+  const updatedInfo = AccountModel.findOneAndUpdate(
+    info,
+    { $inc: { funds: fundsToAdd } },
+    { new: true, upsert: true },
+    callback);
+  return updatedInfo;
+};
+
+AccountSchema.statics.buySocks = (doc, socksPrice, callback) => { // return updated purchase info
+  const info = {
+    username: doc.username,
+    purchases: doc.purchases,
+    funds: doc.funds,
+  };
+  const updatedInfo = AccountModel.findOneAndUpdate(
+    info,
+    {
+      $inc:
+      {
+        purchases: 1,
+        funds: -1 * socksPrice,
+      },
+    },
+    { new: true, upsert: true },
+    callback);
+  return updatedInfo;
+};
+
+AccountSchema.statics.setPassword = (doc, newPass, callback) => { // return updated password
+  const updateUser = AccountModel.findByUsername(doc.username, callback);
+  updateUser.password = newPass;
+  return updateUser;
 };
 
 AccountSchema.statics.authenticate = (username, password, callback) =>
@@ -97,7 +135,6 @@ AccountModel.findByUsername(username, (err, doc) => {
     if (result === true) {
       return callback(null, doc);
     }
-
     return callback();
   });
 });

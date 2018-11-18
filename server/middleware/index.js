@@ -1,3 +1,5 @@
+// handle middleware and login redirects for website
+
 const requiresLogin = (req, res, next) => {
   if (!req.session.account) {
     return res.redirect('/login');

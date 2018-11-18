@@ -1,4 +1,4 @@
-const handleLogin = (e) => {
+const handleLogin = (e) => { // handle login of users
   e.preventDefault();
   $("#errorMessage").fadeIn({width:'hide'},350);
   setTimeout(function() {
@@ -8,12 +8,11 @@ const handleLogin = (e) => {
     handleError("Username or Password is empty.");
     return false;
   }
-  console.log($("input[name=csrf]").val());
   sendAjax('POST', $("#loginForm").attr("action"), $("#loginForm").serialize(), redirect);
   return false;
 };
 
-const handleSignup = (e) => {
+const handleSignup = (e) => { // handle signup of users
   e.preventDefault();
   $("#errorMessage").fadeIn({width:'hide'},350);
   setTimeout(function() {
@@ -31,7 +30,7 @@ const handleSignup = (e) => {
   return false;
 };
 
-const ContentPage = (props) => {
+const ContentPage = (props) => { // create home page for users to see when not logged in; clicking a box prompts them to login
   return (
     <div id="loginStart">
       <div className="taglineDiv">
@@ -71,7 +70,7 @@ const ContentPage = (props) => {
   );
 };
 
-const LoginWindow = (props) => {
+const LoginWindow = (props) => { // creates login page for users; prompted to come here before anything else
   return (
     <div>
         <div className="taglineDiv">
@@ -96,7 +95,7 @@ const LoginWindow = (props) => {
   );  
 };
 
-const SignupWindow = (props) => {
+const SignupWindow = (props) => { // creates signup page for users
   return (
     <div>
         <div className="taglineDiv">
@@ -123,28 +122,28 @@ const SignupWindow = (props) => {
   );  
 };
 
-const createContentPage = (csrf) => {
+const createContentPage = (csrf) => { // renders content page
   ReactDOM.render(
     <ContentPage csrf={csrf} />,
     document.querySelector("#content")
   );
 };
 
-const createLoginWindow = (csrf) => {
+const createLoginWindow = (csrf) => { // renders login page
   ReactDOM.render(
     <LoginWindow csrf={csrf} />,
     document.querySelector("#content")
   );
 };
 
-const createSignupWindow = (csrf) => {
+const createSignupWindow = (csrf) => { // renders signup page
   ReactDOM.render(
     <SignupWindow csrf={csrf} />,
     document.querySelector("#content")
   );
 };
 
-const setup = (csrf) => {
+const setup = (csrf) => { // based on clicked button, take user to specified page. change url based on clicked button.
   let urlString = window.location.href;
   const homeButton = document.querySelector("#homeButton");
   const loginButton = document.querySelector("#loginButton");
@@ -152,16 +151,19 @@ const setup = (csrf) => {
   signupButton.addEventListener("click", (e) => {
     e.preventDefault();
     createSignupWindow(csrf);
+    window.history.pushState('signup', 'signupPage', '/signupPage');
     return false;
   });
   loginButton.addEventListener("click", (e) => {
     e.preventDefault();
     createLoginWindow(csrf);
+    window.history.pushState('login', 'loginPage', '/login');
     return false;
   }); 
   homeButton.addEventListener("click", (e) => {
     e.preventDefault();
     createContentPage(csrf);
+    window.history.pushState('/', 'default', '/');
     return false;
   });
   
@@ -172,11 +174,16 @@ const setup = (csrf) => {
   }
 };
 
-const getToken = () => {
+const getToken = () => { // get csrf token
   sendAjax('GET', '/getToken', null, (result) => {
     setup(result.csrfToken);  
   });
 };
+
+if(performance.navigation.type === 1) { // if page is refreshed, take to a default page
+  window.history.pushState('/', 'defaultPage', '/'); 
+}
+
 
 $(document).ready(function() {
   getToken();

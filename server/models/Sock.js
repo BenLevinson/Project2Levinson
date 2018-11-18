@@ -11,7 +11,7 @@ let SockModel = {};
 // const convertId = mongoose.Types.ObjectId;
 const setName = (name) => _.escape(name).trim();
 
-const SockSchema = new mongoose.Schema({
+const SockSchema = new mongoose.Schema({ // sock schema
   name: {
     type: String,
     required: true,
@@ -57,7 +57,7 @@ SockSchema.statics.toAPI = (doc) => ({
   type: doc.type,
 });
 
-SockSchema.statics.addSock = (n, c, pr, pi, t) => {
+SockSchema.statics.addSock = (n, c, pr, pi, t) => { // add sock to database
   const sockData = {
     name: n,
     category: c,
@@ -68,11 +68,13 @@ SockSchema.statics.addSock = (n, c, pr, pi, t) => {
   return SockModel.create(sockData);
 };
 
-SockSchema.statics.findSocks = (callback) => {
+SockSchema.statics.findSocks = (callback) => { // find and return sock
   SockModel.find({ type: 'sock' }).exec(callback);
 };
 
 SockModel = mongoose.model('Sock', SockSchema);
+
+// add socks to database
 
 SockModel.addSock('Alien Socks', 'Scary', 10.99, 'assets/img/alienSock.jpg', 'sock');
 SockModel.addSock('Baseball Socks', 'Cool', 13.99, 'assets/img/baseballSock.jpg', 'sock');

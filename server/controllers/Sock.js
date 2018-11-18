@@ -2,7 +2,7 @@ const models = require('../models');
 
 const Sock = models.Sock;
 
-const getSocks = (request, response) => {
+const getSocks = (request, response) => { // get sock from database and return it
   // const req = request;
   const res = response;
 

@@ -4,13 +4,17 @@ html, body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-    background-color: lightgrey;
+    background-color: lightgrey !important;
 }
 
 nav {
     width: 100%;
     height: 50px;
     background-color: #55acee;
+    position: relative;
+    top: 10px;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
 }
 
 nav:nth-child(1) {
@@ -19,7 +23,7 @@ nav:nth-child(1) {
 
 .navlink {
     padding: 5px;
-    padding-top: 12px;
+    padding-top: 7px;
     padding-right: 20px;
     color: white;
     font-size: 1.3em;
@@ -74,6 +78,7 @@ nav:nth-child(1) {
     padding: 3px 0px;
     color: white;
     text-decoration: none;
+    
 }
 
 .formSubmit:link, .formSubmit:visited, .formSubmit:hover, .formSubmit:active {
@@ -102,19 +107,23 @@ nav:nth-child(1) {
     text-align: center;
     background-color:  #55acee;
     position: relative;
-    bottom: 30px;
+    top: 10px;
+    width: 100%;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
 }
 
 .taglineDiv h1 {
     position: relative;
     bottom: 15px;
-    font-size: 36px;
+    font-size: 35px;
 }
 
 .taglineDiv h3{
     position: relative;
-    bottom: 25px;
+    bottom: 15px;
     font-style: italic;
+    font-size: 20px;
 }
 
 #loginStart {
@@ -143,6 +152,7 @@ nav:nth-child(1) {
     border: 2px solid black;
     width: 350px;
     height: 250px;
+    border-radius: 25px;
 }
 
 .sockClass:hover {
@@ -152,83 +162,59 @@ nav:nth-child(1) {
 #scarySock {
     display: inline-block;
     position: relative;
-    right: 10px;
+    padding-right: 10px;
 }
 
 #crazySock {
     display: inline-block;
     position: relative;
+    padding-right: 10px;
 }
 
 #funnySock {
     display: inline-block;
     position: relative;
-    left: 10px;
+    padding-right: 10px;
 }
 
 #coolSock {
     display: inline-block;
     position: relative;
-    right: 10px;
+    padding-right: 10px;
     top: 20px;
 }
 
 #superSock {
     display: inline-block;
     position: relative;
+    padding-right: 10px;
     top: 20px;
 }
 
 #normalSock {
     display: inline-block;
     position: relative;
-    left: 10px;
+    padding-right: 10px;
     top: 20px;
 }
 
 #accountInfo {
     border: 2px solid black;
-    width: 40%;
+    border-radius: 25px;
     display: block;
     margin: 0 auto;
+    position: relative;
+    top: 10px;
+}
+
+#accountInfo h1 {
+    font-size: 34px;
 }
 
 #accountInfo p {
-    font-size: 18px;
+    font-size: 24px;
     text-align: left;
-    padding-left: 30%;
-}
-
-#accountInfo h4 {
-    font-size: 18px;
-    display: inline-block;
-    border: 2px solid black;
-    margin: 20px;
-    padding: 10px;
-}
-
-#accountInfo h4:hover {
-    cursor: pointer;
-    transition: background-color 0.4s ease;
-    background-color: darkgrey;
-}
-
-#toggleDisplay {
-    text-align: center;
-    height: 40%;
-    width: 20%;
-    font-size: 20px;
-    border: 1px solid black;
-    position: relative;
-    display: block;
-    top: 120px;
-}
-
-#toggleDisplay input {
-    position: relative;
-    display: block;
-    left: 60px;
-    top: 22px;
+    padding-left: 35%;
 }
 
 #searchInfo {
@@ -242,8 +228,8 @@ nav:nth-child(1) {
 }
 
 .searchSubmit {
-    width: 28px;
-    height: 28px;
+    width: 40px;
+    height: 32px;
     position: relative;
     top: 10px;
     padding-left: 10px;
@@ -254,35 +240,37 @@ nav:nth-child(1) {
 }
 
 #displayContent {
-    width: 50%;
-    height: 80%;
     display: block;
     margin: 0 auto;
+    text-align: center;
     position: relative;
-    min-width: 1000px;
+    left: 40px;
 }
 
 #displayContent img {
     width: 125px;
     height: 125px;
+    padding-top: 20px;
 }
 
 #displayContent img:hover {
     cursor: pointer;
 }
+
 .imgContentDiv {
     width: 125px;
     height: 145px;
     display: inline-block;
-    padding-left: 27.5px;
-    padding-top: 5px;
-    padding-bottom: 7px;
+    margin-left: 20px;
+    margin-right: 20px;
+    float: left;
 }
 
 .imgContentDiv h5 {
     text-align: center;
+    font-size: 13px;
     position: relative;
-    bottom: 18px;
+    top: 5px;
 }
 
 #topRowSocks {
@@ -310,33 +298,66 @@ nav:nth-child(1) {
 }
 
 #errorMessage {
-    display:none;
-    width: 300px;
-    height: 650px;
+    display: none;
     position: relative;
     z-index: 200;
-    left: 44%;
     overflow: hidden;
-}
-
-#errorMessage h3 {
-    width: 400px;
+    text-align: center;
+    margin: 0 auto;
+    top: 15px;
 }
 
 #errMessage {
-    font-size: 1.2em;
+    font-size: 16px;
     font-weight: bold;
     color: red;
     font-style: italic;
+    text-align: center;
+    margin: 0 auto;
+}
+
+#passSubmit {
+    width: 150px;
 }
 
 .passForm {
     margin: 10px;
+    position: relative;
+    width: 250px;
+    display: inline-block;
 }
 
 .passForm label {
     font-size: 15px;
     margin: 10px;
+}
+
+.passForm input {
+    display: block;
+    margin: 0 auto;
+}
+
+#fundsSubmit {
+    width: 150px;
+    position: relative;
+    top: 3px;
+}
+
+.fundsForm {
+    position: relative;
+    width: 250px;
+    display: inline-block;
+    bottom: 20px;
+}
+
+.fundsForm label {
+    font-size: 15px;
+    margin: 10px;
+}
+
+.fundsForm input {
+    display: block;
+    margin: 0 auto;
 }
 
 #notFoundPage {
@@ -363,70 +384,79 @@ nav:nth-child(1) {
     width: 250px;
     height: 250px;
     border: 1px solid black;
+    border-radius: 25px;
     position: relative;
     right: 200px;
+    top: 50px;
 }
 
 #buyInfo h3 {
     position: relative;
     left: 100px;
-    bottom: 250px;
+    bottom: 200px;
 }
 
-#buyInfo h2 {
+.buyForm { 
     font-size: 24px;
-    display: inline-block;
-    border: 1px solid black;
-    margin: 20px;
+    display: block;
+    margin: 0 auto;
     padding: 10px;
     position: relative;
-    bottom: 250px;
-    left: 102px;
+    bottom: 92px;
+    left: 50px;
 }
 
-#buyInfo h2:hover {
+.buyForm:hover {
     cursor: pointer;
-    transition: background-color 0.4s ease;
-    background-color: darkgrey;
 }
 
 #similarSocks {
     position: relative;
-    bottom: 100px;
     text-align: center;
+    display: block;
     margin: 0 auto;
-    width: 100%;
-    min-width: 1300px;
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
 }
 
 #similarSocks h3 {
     position: relative;
-    bottom: 70px;
+    top: 70px;
 }
+
+#similarSocks h5 {
+    font-size: 18px;
+}
+
 #similarSocks img {
-    width: 250px;
-    height: 250px;
+    width: 200px;
+    height: 200px;
     border: 1px solid black;
-    position: relative;
-    top: 15px;
+    border-radius: 25px;
+}
+
+#socksR {
+    border: 1px solid black;
+    border-radius: 25px;
 }
 
 #sock1 {
     display: inline-block;
-    position: relative;
-    right: 250px;
+    padding-right: 75px;
+    padding-left: 75px;
+    padding-top: 10px;
 }
 
 #sock2 {
     display: inline-block;
+    padding-right: 75px;
+    padding-left: 75px;
+    margin: 0 auto;
 }
 
 #sock3 {
     display: inline-block;
-    position: relative;
-    left: 250px;
+    margin: 0 auto;
+    padding-right: 75px;
+    padding-left: 75px;
 }
 
 #sock1:hover {
@@ -439,4 +469,9 @@ nav:nth-child(1) {
 
 #sock3 {
     cursor: pointer;
+}
+
+#noResults {
+    visibility: hidden;
+    text-align: center;
 }

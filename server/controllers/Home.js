@@ -1,20 +1,20 @@
-const homePage = (req, res) => {
-  return res.render('app', { csrfToken: req.csrfToken() });
-};
+// display different pages on website
 
-const accountPage = (req, res) => {
-  return res.render('account', { csrfToken: req.csrfToken() });
-};
+const homePage = (req, res) => res.render('app', { csrfToken: req.csrfToken() });
 
-const searchPage = (req, res) => {
-  return res.render('search', { csrfToken: req.csrfToken() });
-};
+const accountPage = (req, res) => res.render('account', { csrfToken: req.csrfToken() });
 
-const notFoundPage = (req, res) => {
-  return res.render('notFound', { csrfToken: req.csrfToken() });
-};
+const searchPage = (req, res) => res.render('search', { csrfToken: req.csrfToken() });
+
+const buyPage = (req, res) => res.render('buy', { csrfToken: req.csrfToken() });
+
+const signupPage = (req, res) => res.render('signupPage', { csrfToken: req.csrfToken() });
+
+const notFoundPage = (req, res) => res.render('notFound', { csrfToken: req.csrfToken() });
 
 module.exports.homePage = homePage;
 module.exports.accountPage = accountPage;
 module.exports.searchPage = searchPage;
+module.exports.signupPage = signupPage;
+module.exports.buyPage = buyPage;
 module.exports.notFoundPage = notFoundPage;

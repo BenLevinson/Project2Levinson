@@ -2,8 +2,54 @@ const models = require('../models');
 
 const Account = models.Account;
 
-const getAccInfo = (account) => {
-  return Account.AccountModel.getAccInfo(account);
+const getAccInfo = (request, response) => { // get information of user account
+  const req = request;
+  const res = response;
+  Account.AccountModel.getAccInfo(req.session.account, (err, docs) => {
+    if (err) {
+      return res.status(400).json({ error: 'An error has occurred.' });
+    }
+    return res.json({ info: docs });
+  });
+};
+
+const addFunds = (request, response) => { // add funds to user account
+  const req = request;
+  const res = response;
+  const fundsToAdd = `${req.body.fundsToAdd}`;
+  if (!fundsToAdd) {
+    return res.status(400).json({ error: 'All fields are required.' });
+  }
+  return Account.AccountModel.addFunds(req.session.account, fundsToAdd, (err, docs) => {
+    if (err) {
+      return res.status(400).json({ error: 'An error has occurred.' });
+    }
+    req.session.account = Account.AccountModel.toAPI(docs);
+    return res.json({ updateInfo: docs });
+  });
+};
+
+const buySocks = (request, response) => { // buy socks for user account
+  const req = request;
+  const res = response;
+  const socksToBuy = `${req.body.socksBought}`;
+  const socksPrice = `${req.body.socksPrice}`;
+  const currFunds = `${req.body.currFunds}`;
+  const socksPriceInt = 1 + parseInt(socksPrice, 10);
+  const currFundsInt = parseInt(currFunds, 10);
+
+  if (!socksToBuy) {
+    return res.status(400).json({ error: 'All fields are required.' });
+  } if (currFundsInt - socksPriceInt < 0) {
+    return res.status(400).json({ error: 'Not enough funds to buy.' });
+  }
+  return Account.AccountModel.buySocks(req.session.account, socksPriceInt, (err, docs) => {
+    if (err) {
+      return res.status(400).json({ error: 'An error has occurred.' });
+    }
+    req.session.account = Account.AccountModel.toAPI(docs);
+    return res.json({ updateInfo: docs });
+  });
 };
 
 const loginPage = (req, res) => {
@@ -30,8 +76,6 @@ const login = (request, response) => {
       return res.status(401).json({ error: 'Wrong username or password' });
     }
     req.session.account = Account.AccountModel.toAPI(account);
-    console.log(req.session.account.username);
-    getAccInfo(req.session.account);
     return res.json({ redirect: '/home' });
   });
 };
@@ -65,12 +109,10 @@ const signup = (request, response) => {
 
     savePromise.then(() => {
       req.session.account = Account.AccountModel.toAPI(newAccount);
-      getAccInfo(req.session.account);
       res.json({ redirect: '/home' });
     });
 
     savePromise.catch((err) => {
-      console.log(err);
       if (err.code === 11000) {
         return res.status(400).json({ error: 'Username already in use.' });
       }
@@ -82,27 +124,35 @@ const signup = (request, response) => {
 const changePassword = (request, response) => {
   const req = request;
   const res = response;
+  const username = `${req.body.username}`;
+  req.body.oldPass = `${req.body.oldPass}`;
+  req.body.newPass = `${req.body.newPass}`;
 
-  req.body.pass = `${req.body.newPass1}`;
-  req.body.pass2 = `${req.body.newPass2}`;
-
-  if (!req.body.newPass1 || !req.body.newPass2) {
+  if (!req.body.newPass || !req.body.oldPass) {
     return res.status(400).json({ error: 'All fields are required' });
   }
 
-  if (req.body.newPass1 !== req.body.newPass2) {
-    return res.status(400).json({ error: 'Passwords do not match' });
-  }
-
-  return Account.AccountModel.findByUsername(req.session.account.username).then(function(user) {
-    if (user) {
-      user.setPassword(req.body.pass2, function() {
-        user.save();
-        res.status(200).json({ message: 'Password reset successful!' });
-      });
-    } else {
-      res.status(500).json({ message: 'User does not exist.' });
+  return Account.AccountModel.authenticate(username, req.body.oldPass, (err, account) => {
+    if (err || !account) {
+      return res.status(401).json({ error: 'An error has occurrred' });
     }
+    const updatedAccount = account;
+    return Account.AccountModel.generateHash(req.body.newPass, (salt, hash) => {
+      updatedAccount.password = hash;
+      updatedAccount.salt = salt;
+      const savePromise = updatedAccount.save();
+
+      savePromise.then(() => res.json({
+        password: updatedAccount.password,
+      }));
+
+      savePromise.catch((err2) => {
+        if (err2.code === 11000) {
+          return res.status(400).json({ error: 'Duplicate key error.' });
+        }
+        return res.status(400).json({ error: 'An unexpected error occurred.' });
+      });
+    });
   });
 };
 
@@ -121,4 +171,6 @@ module.exports.logout = logout;
 module.exports.signup = signup;
 module.exports.getToken = getToken;
 module.exports.getAccInfo = getAccInfo;
+module.exports.addFunds = addFunds;
+module.exports.buySocks = buySocks;
 module.exports.changePassword = changePassword;

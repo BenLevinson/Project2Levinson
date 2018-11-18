@@ -1,6 +1,7 @@
 "use strict";
 
 var handleLogin = function handleLogin(e) {
+  // handle login of users
   e.preventDefault();
   $("#errorMessage").fadeIn({ width: 'hide' }, 350);
   setTimeout(function () {
@@ -10,12 +11,12 @@ var handleLogin = function handleLogin(e) {
     handleError("Username or Password is empty.");
     return false;
   }
-  console.log($("input[name=csrf]").val());
   sendAjax('POST', $("#loginForm").attr("action"), $("#loginForm").serialize(), redirect);
   return false;
 };
 
 var handleSignup = function handleSignup(e) {
+  // handle signup of users
   e.preventDefault();
   $("#errorMessage").fadeIn({ width: 'hide' }, 350);
   setTimeout(function () {
@@ -34,6 +35,7 @@ var handleSignup = function handleSignup(e) {
 };
 
 var ContentPage = function ContentPage(props) {
+  // create home page for users to see when not logged in; clicking a box prompts them to login
   return React.createElement(
     "div",
     { id: "loginStart" },
@@ -160,6 +162,7 @@ var ContentPage = function ContentPage(props) {
 };
 
 var LoginWindow = function LoginWindow(props) {
+  // creates login page for users; prompted to come here before anything else
   return React.createElement(
     "div",
     null,
@@ -205,6 +208,7 @@ var LoginWindow = function LoginWindow(props) {
 };
 
 var SignupWindow = function SignupWindow(props) {
+  // creates signup page for users
   return React.createElement(
     "div",
     null,
@@ -256,18 +260,22 @@ var SignupWindow = function SignupWindow(props) {
 };
 
 var createContentPage = function createContentPage(csrf) {
+  // renders content page
   ReactDOM.render(React.createElement(ContentPage, { csrf: csrf }), document.querySelector("#content"));
 };
 
 var createLoginWindow = function createLoginWindow(csrf) {
+  // renders login page
   ReactDOM.render(React.createElement(LoginWindow, { csrf: csrf }), document.querySelector("#content"));
 };
 
 var createSignupWindow = function createSignupWindow(csrf) {
+  // renders signup page
   ReactDOM.render(React.createElement(SignupWindow, { csrf: csrf }), document.querySelector("#content"));
 };
 
 var setup = function setup(csrf) {
+  // based on clicked button, take user to specified page. change url based on clicked button.
   var urlString = window.location.href;
   var homeButton = document.querySelector("#homeButton");
   var loginButton = document.querySelector("#loginButton");
@@ -275,16 +283,19 @@ var setup = function setup(csrf) {
   signupButton.addEventListener("click", function (e) {
     e.preventDefault();
     createSignupWindow(csrf);
+    window.history.pushState('signup', 'signupPage', '/signupPage');
     return false;
   });
   loginButton.addEventListener("click", function (e) {
     e.preventDefault();
     createLoginWindow(csrf);
+    window.history.pushState('login', 'loginPage', '/login');
     return false;
   });
   homeButton.addEventListener("click", function (e) {
     e.preventDefault();
     createContentPage(csrf);
+    window.history.pushState('/', 'default', '/');
     return false;
   });
 
@@ -296,26 +307,32 @@ var setup = function setup(csrf) {
 };
 
 var getToken = function getToken() {
+  // get csrf token
   sendAjax('GET', '/getToken', null, function (result) {
     setup(result.csrfToken);
   });
 };
+
+if (performance.navigation.type === 1) {
+  // if page is refreshed, take to a default page
+  window.history.pushState('/', 'defaultPage', '/');
+}
 
 $(document).ready(function () {
   getToken();
 });
 "use strict";
 
+// handle error and redirects for website
+
 var handleError = function handleError(message) {
   $("#errMessage").text(message);
   $("#errorMessage").fadeIn({ width: 'toggle' }, 350);
-  console.log(message);
 };
 
 var redirect = function redirect(response) {
   $("#errorMessage").fadeIn({ width: 'hide' }, 350);
   window.location = response.redirect;
-  console.log(response);
 };
 
 var sendAjax = function sendAjax(type, action, data, success) {
@@ -328,7 +345,6 @@ var sendAjax = function sendAjax(type, action, data, success) {
     success: success,
     error: function error(xhr, status, _error) {
       var messageObj = JSON.parse(xhr.responseText);
-      console.log(action);
       handleError(messageObj.error);
     }
   });
